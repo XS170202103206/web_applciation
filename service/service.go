@@ -14,8 +14,6 @@ import (
 	"gin/models"
 )
 
-
-
 type OrderService struct {
 	orderDao *Dao.OrderDao
 }
@@ -32,7 +30,7 @@ func (service *OrderService) CreateModels(ms *models.DemoOrders) error {
 	return service.orderDao.CreateModels(ms.Models)
 }
 
-func (service *OrderService) GetModel(id string) (*models.DemoOrder, error) {
+func (service *OrderService) GetModel(id int) (*models.DemoOrder, error) {
 	return service.orderDao.GetModel(id)
 }
 
@@ -43,7 +41,7 @@ func (service *OrderService) GetModels(query, order, by string) ([]models.DemoOr
 	return service.orderDao.GetModels(query, order, by)
 }
 
-func (service *OrderService) UpdateModel(id string, updateModel *models.DemoOrder) error {
+func (service *OrderService) UpdateModel(id int, updateModel *models.DemoOrder) error {
 	m, err := service.orderDao.GetModel(id)
 	if err != nil {
 		return err
@@ -55,7 +53,7 @@ func (service *OrderService) UpdateModel(id string, updateModel *models.DemoOrde
 	return service.orderDao.UpdateModel(m)
 }
 
-func (service *OrderService) UploadFile(id string, file *multipart.FileHeader) (*string, error) {
+func (service *OrderService) UploadFile(id int, file *multipart.FileHeader) (*string, error) {
 	//  检查id是否存在
 	m, err := service.orderDao.GetModel(id)
 	if err != nil {
@@ -63,7 +61,7 @@ func (service *OrderService) UploadFile(id string, file *multipart.FileHeader) (
 	}
 
 	//  更新文件路径
-	dst := fmt.Sprintf("./file/%s_%s", id, file.Filename)
+	dst := fmt.Sprintf("./file/%d_%s", id, file.Filename)
 	m.FileUrl = dst
 	if err = service.orderDao.UpdateModel(m); err != nil {
 		return nil, err
@@ -72,7 +70,7 @@ func (service *OrderService) UploadFile(id string, file *multipart.FileHeader) (
 	return &dst, nil
 }
 
-func (service *OrderService) DownloadFile(id string) (*string, error) {
+func (service *OrderService) DownloadFile(id int) (*string, error) {
 	m, err := service.GetModel(id)
 	if err != nil {
 		return nil, err

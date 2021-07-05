@@ -14,7 +14,6 @@ type DemoOrder struct{
 }
 
 type DemoOrders struct {
-	Models []DemoOrder `json:"models"`
+	Models []*DemoOrder `json:"models"`
+	//ms.Models []models.DemoOrder
 }
-
-

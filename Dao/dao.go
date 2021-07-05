@@ -25,7 +25,7 @@ func (orderDao *OrderDao) CreateModel(m *models.DemoOrder) error {
 	return nil
 }
 //插入多条数据
-func (orderDao *OrderDao) CreateModels(ms []models.DemoOrder) error {
+func (orderDao *OrderDao) CreateModels(ms []*models.DemoOrder) error {
 	tx := orderDao.db.Begin()
 	defer tx.Rollback()
 
@@ -45,7 +45,7 @@ func (orderDao *OrderDao) UpdateModel(m *models.DemoOrder) error {
 	return nil
 }
 //获取单条order信息
-func (orderDao *OrderDao) GetModel(id string) (*models.DemoOrder, error) {
+func (orderDao *OrderDao) GetModel(id int) (*models.DemoOrder, error) {
 	var m models.DemoOrder
 	if err := orderDao.db.Where("id = ?", id).First(&m).Error; err != nil {
 		return nil, err

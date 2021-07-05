@@ -1,7 +1,6 @@
 package service
 
 import (
-	"strconv"
 	"testing"
 
 	"gin/models"
@@ -46,13 +45,14 @@ func TestModelService_CRU(t *testing.T) {
 
 			//  Update Model
 			testCase.updateModel.Model = testCase.createModel.Model
-			err = service.UpdateModel(testCase.updateModel)
+			err = service.UpdateModel(int(testCase.createModel.ID),testCase.updateModel)
 			if err != nil {
 				t.Errorf("Update model error: %v", err)
 			}
 
 			//  Get Model
-			err = service.GetModel(strconv.Itoa(int(testCase.createModel.ID)), testCase.readModel)
+			_,err = service.GetModel(int(testCase.createModel.ID))
+			//err, _ = service.GetModel(int(testCase.createModel.ID))
 			if err != nil {
 				t.Errorf("Get model error: %v", err)
 			}
@@ -76,11 +76,11 @@ func TestModelService_GetModels(t *testing.T) {
 		{name: "success 3", query: "123", order: "AMOUNT", by: "ASC"},
 	}
 
-	var modelss []models.DemoOrder
+	//var modelss []models.DemoOrder
 	var service OrderService
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			if err := service.GetModels(&modelss, testCase.query, testCase.order, testCase.by); err != nil {
+			if _,err := service.GetModels(testCase.query, testCase.order, testCase.by); err != nil {
 				t.Errorf("Get all model error: %v\n", err)
 			}
 		})
@@ -95,7 +95,7 @@ func TestModelService_CreateModels(t *testing.T) {
 		{
 			name: "success 1",
 			createModels: &models.DemoOrders{
-				Models: []models.DemoOrder{
+				Models: []*models.DemoOrder{
 					{OrderNo: "0", UserName: "user1", Amount: 0, Status: "0", FileUrl: ""},
 					{OrderNo: "0", UserName: "user2", Amount: 0, Status: "0", FileUrl: ""},
 					{OrderNo: "0", UserName: "user3", Amount: 0, Status: "0", FileUrl: ""},
@@ -109,18 +109,17 @@ func TestModelService_CreateModels(t *testing.T) {
 		{
 			name: "success 2",
 			createModels: &models.DemoOrders{
-				Models: []models.DemoOrder{
+				Models: []*models.DemoOrder{
 				},
 			},
 		},
 	}
-
-	var service OrderService
+	service := NewOrderService()
 	//  test create update read
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			//  Create Models
-			err := service.CreateModels(&testCase.createModels.Models)
+			err := service.CreateModels(&models.DemoOrders{Models: testCase.createModels.Models})
 			if err != nil {
 				t.Errorf("Create models error: %v", err)
 			}
