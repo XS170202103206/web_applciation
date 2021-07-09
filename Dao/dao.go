@@ -65,7 +65,7 @@ func (orderDao *OrderDao) GetModels(query, order, by string) ([]models.DemoOrder
 
 	return ms, nil
 }
-/*//上传文件
+//上传文件
 func (orderDao *OrderDao)UploadFile(id string,FileUrl string) (*models.DemoOrder,error){
 	//var m models.DemoOrder
 	err := orderDao.db.Where("id = ?",id).
@@ -74,4 +74,4 @@ func (orderDao *OrderDao)UploadFile(id string,FileUrl string) (*models.DemoOrder
 		return nil, err
 	}
 	return nil,err
-}*/
+}
