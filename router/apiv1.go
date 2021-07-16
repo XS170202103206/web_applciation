@@ -7,6 +7,7 @@ func (r *Router) V1Group() {
 
 	r.V1 = r.Root.Group("/api/v1")
 	r.V1.GET("/models", h.GetModels)                   //  get list
+	r.V1.GET("/all", h.GetListModels)
 	r.V1.GET("/models/:id", h.GetModel)                //  get single
 	r.V1.POST("/models", h.CreateModel)                //  create single
 	r.V1.POST("/models/count", h.CreateModels)         //  create more

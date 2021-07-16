@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 
 	"gin/models"
 	"gin/response"
@@ -52,8 +53,8 @@ func (handler *OrderHandler) CreateModels(c *gin.Context) {
 }
 //get order list
 func (handler *OrderHandler) GetModel(c *gin.Context) {
-	id := c.Params.ByName("id")
-
+	ids := c.Params.ByName("id")
+	id, _ := strconv.Atoi(ids)
 	m, err := handler.service.GetModel(id)
 	if err != nil {
 		response.ErrorRes(c, http.StatusBadRequest, "Model not exists", err.Error())
@@ -62,6 +63,17 @@ func (handler *OrderHandler) GetModel(c *gin.Context) {
 
 	response.SuccessRes(c, "Get model success", m)
 }
+
+func (handler *OrderHandler) GetListModels(c *gin.Context) {
+	m, err := handler.service.GetListModels()
+	if err != nil {
+		response.ErrorRes(c, http.StatusBadRequest, "models not exist", err.Error())
+		return
+	}
+	response.SuccessRes(c, "Get models successful", m)
+}
+
+
 //get order single
 func (handler *OrderHandler) GetModels(c *gin.Context) {
 	var ms []models.DemoOrder
@@ -90,8 +102,8 @@ func (handler *OrderHandler) GetModels(c *gin.Context) {
 func (handler *OrderHandler) UpdateModel(c *gin.Context) {
 	var m models.DemoOrder
 
-	id := c.Params.ByName("id")
-
+	ids := c.Params.ByName("id")
+	id, _ := strconv.Atoi(ids)
 	if err := c.BindJSON(&m); err != nil {
 		response.ErrorRes(c, http.StatusBadRequest, "Bind json error", err.Error())
 		return
@@ -106,8 +118,8 @@ func (handler *OrderHandler) UpdateModel(c *gin.Context) {
 }
 //上传文件
 func (handler *OrderHandler) Upload(c *gin.Context) {
-	id := c.Params.ByName("id")
-
+	ids := c.Params.ByName("id")
+	id, _ := strconv.Atoi(ids)
 	file, err := c.FormFile("file")
 	if err != nil {
 		response.ErrorRes(c, http.StatusBadRequest, "Read file error", err.Error())
@@ -128,8 +140,8 @@ func (handler *OrderHandler) Upload(c *gin.Context) {
 
 //下载文件
 func (handler *OrderHandler) Download(c *gin.Context) {
-	id := c.Params.ByName("id")
-
+	ids := c.Params.ByName("id")
+	id, _ := strconv.Atoi(ids)
 	dst, err := handler.service.DownloadFile(id)
 	if err != nil {
 		response.ErrorRes(c, http.StatusBadRequest, "Download file error", err.Error())

@@ -41,6 +41,10 @@ func (service *OrderService) GetModels(query, order, by string) ([]models.DemoOr
 	return service.orderDao.GetModels(query, order, by)
 }
 
+func (service *OrderService) GetListModels()([]*models.DemoOrder, error) {
+	return service.orderDao.GetListModels()
+}
+
 func (service *OrderService) UpdateModel(id int, updateModel *models.DemoOrder) error {
 	m, err := service.orderDao.GetModel(id)
 	if err != nil {
